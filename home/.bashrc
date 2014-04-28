@@ -8,11 +8,12 @@
 # dirty hack to turn on NumLock
 #setleds +num
 
-alias ls='ls --color=auto'
-alias ll='ls -l --color=auto'
-alias la='ls -la --color=auto'
+alias ls='ls --color=auto --group-directories-first'
+alias ll='ls -lh --color=auto'
+alias la='ls -lha --color=auto'
 alias l='ls -CF --color=auto'
 alias grep='grep -n --color=auto'
+alias xgrep='/bin/grep'
 
 #alias pacman='pacman-color'
 
