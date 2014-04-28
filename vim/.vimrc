@@ -1,75 +1,63 @@
+""""""""""""""""""""""""
+" => General
+""""""""""""""""""""""""
 syntax on
 setglobal fileencodings=utf8
 set history=700
+
+" Enable filetype plugins
 filetype on
 filetype plugin on
 filetype indent on
-set autochdir
-set autoread
-set bs=2 " backspaces ???
-set ts=4 " tab stop
-set sw=4 " shift width???
+
+set autochdir   " follow file
+set autoread    " auto update
+set bs=2        " backspaces ???
+set ts=4        " tab stop
+set sw=4        " shift width???
 set expandtab
 set ruler
 set mouse=a
+set nowrap      " no text wrap
 
+set autoindent  " auto formating
+set cindent     " auto formating
+set smartindent " auto formating
+
+set foldmethod=syntax
+
+" intelligent comments
+set comments=sl:/*,mb:\ *,elx:\ */
+
+
+""""""""""""""""""""""""
+" => Vim Interface
+""""""""""""""""""""""""
 colorscheme h80_my
 
-" no text wrap
-set nowrap
-
-" auto formating
-set autoindent
-set cindent
-set smartindent
-
-" highlight matching braces
-set showmatch
+set showmatch   " highlight matching braces
+set hlsearch    " highlight search results
 
 " highlight after 80 symbol
 let &colorcolumn=join(range(81,999),",")
-"set colorcolumn=80
 highlight ColorColumn ctermfg=red ctermbg=black
+"set colorcolumn=80
 
 " highlight trailing spaces
 highlight ExtraWhitespace ctermbg=red guibg=red
 match ExtraWhitespace /\s\+$\| \+\ze\t/
 autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-" autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+" autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 
-" intelligent comments
-set comments=sl:/*,mb:\ *,elx:\ */
+" Status line
+set laststatus=2
+set statusline=%f%m%r\ %=c:%2c\ l:%2l/%L\ [%2p%%]
 
-" Omni
-set tags+=~/.vim/tags/cpp
-map <C-F12> :!ctags -R --sort=yes --c++-kinds=+p --fields=+iaS --extra=+q .<CR>
 
-let OmniCpp_NamespaceSearch = 1
-let OmniCpp_GlobalScopeSearch = 1
-let OmniCpp_ShowAccess = 1
-let OmniCpp_ShowPrototypeInAbbr = 1 " show function parameters
-let OmniCpp_MayCompleteDot = 1		" autocomplete after .
-let OmniCpp_MayCompleteArrow = 1	" autocomplete after ->
-let OmniCpp_MayCompleteScope = 1	" autocomplete after ::
-let OmniCpp_DefaultNamespace = ["std", "_GLIBCXX_STD"]
-" let OmniCpp_SelectFirstSearch = 2 " select first item (but don't insert)
-
-set ofu=syntaxcomplete#Complete
-set completeopt=menuone,menu,longest,preview
-
-set ignorecase
-set hlsearch
-
-set foldmethod=syntax
-
-""""""""""""""""""""""""""""""
-" => Visual mode related
-""""""""""""""""""""""""""""""
-" Visual mode pressing * or # searches for the current selection
-" Super useful! From an idea by Michael Naumann
-"vnoremap <silent> * :call VisualSelection('f')<CR>
-"vnoremap <silent> # :call VisualSelection('b')<CR>
+""""""""""""""""""""""""
+" => Misc
+""""""""""""""""""""""""
 
 " Return to last edit position when opening files (You want this!)
 autocmd BufReadPost *
@@ -77,16 +65,15 @@ autocmd BufReadPost *
      \   exe "normal! g`\"" |
      \ endif
 
-if has("gui_running")
-    " C-Space seems to work under gVim on both Linux and win32
-    inoremap <C-Space> <C-n>
-else " no gui
-  if has("unix")
-    inoremap <Nul> <C-n>
-  else
-  " I have no idea of the name of Ctrl-Space elsewhere
-  endif
-endif
+" let's try to do cross-vim buffer exchange
+vmap <silent> ,y y:new<CR>:call setline(1,getregtype())<CR>o<Esc>P:wq! ~/.vim/clipboard.txt<CR>
+nmap <silent> ,y :new<CR>:call setline(1,getregtype())<CR>o<Esc>P:wq! ~/.vim/clipboard.txt<CR>
+map <silent> ,p :sview ~/.vim/clipboard.txt<CR>"zdddG:q!<CR>:call setreg('"', @", @z)<CR>p
+map <silent> ,P :sview ~/.vim/clipboard.txt<CR>"zdddG:q!<CR>:call setreg('"', @", @z)<CR>P
+
+" F2 for saving changes
+imap <F2> <Esc>:w<CR>
+map  <F2> <Esc>:w<CR>
 
 " tabs
 map <Esc>1 1gt
@@ -179,3 +166,18 @@ function MyTabLine()
   return s
 endfunction
 
+
+""""""""""""""""""""""""
+" => Uknown part
+""""""""""""""""""""""""
+
+if has("gui_running")
+    " C-Space seems to work under gVim on both Linux and win32
+    inoremap <C-Space> <C-n>
+else " no gui
+  if has("unix")
+    inoremap <Nul> <C-n>
+  else
+  " I have no idea of the name of Ctrl-Space elsewhere
+  endif
+endif
