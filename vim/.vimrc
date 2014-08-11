@@ -50,6 +50,12 @@ autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 " autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 
+" highlight TABS
+highlight AllTab ctermbg=blue guifg=blue guibg=red
+match AllTab /\t/
+autocmd BufWinEnter * match AllTab /\t/
+autocmd InsertLeave * match AllTab /\t/
+
 " Status line
 set laststatus=2
 set statusline=%f%m%r\ %=c:%2c\ l:%2l/%L\ [%2p%%]
